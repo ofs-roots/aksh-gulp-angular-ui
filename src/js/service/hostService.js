@@ -1,6 +1,7 @@
 angular.module('myApp')
-.service('restCalls',function($http){
-		var res={};
+.service('restCalls',function($http,$q){
+		// var res={};
+		var deferred = $q.defer;
 		this.submit = function(id,hostgroup){
 			var values={
 				name:hostgroup.name,
@@ -12,6 +13,8 @@ angular.module('myApp')
 				 		send_to_cta:hostgroup.send_to_cta,
 				 		description:hostgroup.description
 			}
+
+
 			return $http.put("http://localhost:8080/jerseyrest/rest/hostgroup/"+id,values);
 				// .then(function successCallback(response){
 				// 	// $q.resolve("Resolved");
@@ -34,6 +37,15 @@ angular.module('myApp')
 				
 			}
 			return $http.post("http://localhost:8080/jerseyrest/rest/hostgroup",values);
+			// $http.post("http://localhost:8080/jerseyrest/rest/hostgroup",values)
+			// 	.then(function successCallback(response){
+			// 		deferred.resolve(response.data);
+			// 	},
+			// 		function errorCallback(errors){
+			// 			deferred.reject(errors);
+			// 		});
+			// 	return deferred.promise;
+
 		}
 
 		this.getFlattenTree =  function(){
