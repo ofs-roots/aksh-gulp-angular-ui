@@ -74,11 +74,16 @@ gulp.task('copyHtml',function(){
    
 });
 
+gulp.task('json',function(){
+    gulp.src('src/data/mockhost.json')
+    .pipe(gulp.dest('./dist/data'))
+});
+
 
 gulp.task('jstree-icons',function(){
     gulp.src(['node_modules/jstree/dist/themes/default/*.png','node_modules/jstree/dist/themes/default/*.gif'])
     .pipe(gulp.dest('./dist/css/'))
 });
 
-gulp.task('default', ['scripts', 'styles','copyHtml','partials','jstree-icons']); // start default tasks "gulp"
+gulp.task('default', ['scripts', 'styles','copyHtml','json','partials','jstree-icons']); // start default tasks "gulp"
 gulp.task('watch', ['watcher']); // start watcher task "gulp watch"

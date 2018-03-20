@@ -49,7 +49,14 @@ angular.module('myApp')
 		}
 
 		this.getFlattenTree =  function(){
-			return $http.get('http://localhost:8080/jerseyrest/rest/hostgroup/flatten');
+			// var request = {
+   //              method: 'get',
+   //              url: '../src/data/mockhost.json',
+   //              dataType: 'json',
+   //              contentType: "application/json"
+   //          };
+            return $http.get('data/mockhost.json');
+			// return $http.get('http://localhost:8080/jerseyrest/rest/hostgroup/flatten');
 				}
 
 		this.deleteHostNode = function(id){
