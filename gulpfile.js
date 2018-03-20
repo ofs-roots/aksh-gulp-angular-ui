@@ -8,7 +8,14 @@ var gulp = require('gulp'),
     pkg = require('./package.json'),
     minifyCSS = require('gulp-minify-css'),
     clean = require('gulp-clean'),
-    watch = require('gulp-watch');
+    watch = require('gulp-watch'),
+    karma = require('karma').Server,
+    angularmock = require('angular-mocks'),
+    gulp_karma = require('gulp-karma'),
+    jasmine_core = require('jasmine-core'),
+    phantomjs = require('karma-phantomjs-launcher'),
+    karma_jasmine = require('karma-jasmine'),
+    karma_coverage = require('karma-coverage');
     
     gulp.task('clean', function(){
         gulp.src('./dist')
@@ -82,3 +89,12 @@ gulp.task('jstree-icons',function(){
 
 gulp.task('default', ['scripts', 'styles','copyHtml','partials','jstree-icons']); // start default tasks "gulp"
 gulp.task('watch', ['watcher']); // start watcher task "gulp watch"
+
+gulp.task('test', function(done) {
+    return karma.start({
+      configFile:  __dirname + '/test/config/karma.config.js',
+      singleRun: true
+    }, function() {
+        done();
+    });
+});

@@ -1,49 +1,35 @@
-
-
-
-
-
-
 <div class="container">
 	<div class="row">
-		<div id ="left" class="col-sm-4"></div>
+		<div id ="left" class="col-sm-4">
+		</div>
 		<div class="col-sm-4">
-		HOST GROUP ID:<br>
-		<input class="form-control" type="text" ng-model="hostgroup.id" disabled><br>
-		HOST GROUP NAME:<br>
-		<input class="form-control" type="text" ng-model="hostgroup.name"><br>
-		HOST GROUP PARENTID:<br>
-		<input class="form-control" type="text" ng-model="hostgroup.parentid"><br>
-		DESCRIPTION (512 CHAR MAX):<br>
-		<textarea class="form-control" row="5" type="text" ng-model="hostgroup.description" maxlength="512" width="50"></textarea><br>
-		IP ADDRESSES AND RANGES:<br>
-		<input class="form-control" type="text" ng-model="hostgroup.ip_address"><br>
+			HOST GROUP ID:<br>
+				<input class="form-control" type="text" ng-model="hostgroup.id" disabled><br>
+			HOST GROUP NAME:<br>
+				<input class="form-control" type="text" ng-model="hostgroup.name"><br>
+			HOST GROUP PARENTID:<br>
+				<input class="form-control" type="text" ng-model="hostgroup.parentid"><br>
+			DESCRIPTION (512 CHAR MAX):<br>
+				<textarea class="form-control" row="5" type="text" ng-model="hostgroup.description" maxlength="512" width="50"></textarea><br>
+			IP ADDRESSES AND RANGES:<br>
+				<input class="form-control" type="text" ng-model="hostgroup.ip_address"><br>
+		</div>
+		<div class="col-sm-4">
+			<div class="checkbox-inline">
+				ADVANCED OPTIONS<br>
+					<input type="checkbox" ng-model="hostgroup.hostbaseline" value="false">Enable baselining for host in this group<br>
+					<input type="checkbox" ng-model="hostgroup.suppress_excluded_service" value="false">Disable security Events using excluded services<br>
+					<input type="checkbox" ng-model="hostgroup.send_to_cta" value="false">Disable flood alarm and security events when a host in this group is the target<br>
+					<input type="checkbox" ng-model="hostgroup.host_trap" value="false">Trap hosts that scan unused addresses in this host<br>
+					<input type="checkbox" ng-model="hostgroup.inverse_suppression" value="false">Inverse Suppression<br>
+					<br><br><br><br><br><br><br><br><br><br><br><br>
+			</div>
+			<div id="button">
+				<input type="button" class="btn btn-success" ng-click="cancel()" value="Cancel">
+				<input type="button" ng-disabled="isDisabled" class="btn btn-success" ng-click="submit(hostgroup.id,hostgroup)" value="Save">
+			</div>
+		</div>
 	</div>
-	<div class="col-sm-4">
-		<div class="checkbox-inline">
-	ADVANCED OPTIONS<br>
-	<input type="checkbox" ng-model="hostgroup.hostbaseline" value="false">Enable baselining for host in this group<br>
-	
-	<input type="checkbox" ng-model="hostgroup.suppress_excluded_service" value="false">Disable security Events using excluded services<br>
-	<input type="checkbox" ng-model="hostgroup.send_to_cta" value="false">Disable flood alarm and security events when a host in this group is the target<br>
-	<input type="checkbox" ng-model="hostgroup.host_trap" value="false">Trap hosts that scan unused addresses in this host<br>
-	<input type="checkbox" ng-model="hostgroup.inverse_suppression" value="false">Inverse Suppression<br>
-	<br><br><br><br><br><br><br><br><br><br><br><br>
-	</div>
-	<div id="button">
-<input type="button" class="btn btn-success" ng-click="cancel()" value="Cancel">
-<input type="button" ng-disabled="isDisabled" class="btn btn-success" ng-click="submit(hostgroup.id,hostgroup)" value="Save">
-
-  
-
-</div>
-
-
-
-</div>
-
-</div>
-
 </div>
 
 

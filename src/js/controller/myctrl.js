@@ -4,15 +4,11 @@ angular.module('myApp')
 myCtrl.$inject = ['restCalls','$scope','$window'];
 
 function myCtrl(restCalls,$scope,$window){
-
-	$scope.print = function(name){
-	
-		$scope.name = name;
-	}
+	$scope.greeting = "Welcome";
 
 	$scope.cancel = function(){
 			location.reload();
-		}
+	}
 
 	$scope.initleft = function(){
 			$(function () {
@@ -28,14 +24,14 @@ function myCtrl(restCalls,$scope,$window){
 									temp.parent='#';
 									temp.text=response.data[i].name;
 									tree.push(temp)
-									}else{
-										temp.id=response.data[i].id;
-										temp.parent=response.data[i].parentid;
-										temp.text=response.data[i].name;
-										tree.push(temp);
-										}
+								}else{
+									temp.id=response.data[i].id;
+									temp.parent=response.data[i].parentid;
+									temp.text=response.data[i].name;
+									tree.push(temp);
+								}
 						}
-											createJSTree(tree);
+						createJSTree(tree);
 					})
 			});
 
@@ -43,7 +39,7 @@ function myCtrl(restCalls,$scope,$window){
             	$('#left').jstree({
                 	'core': {
                 		'data': tree
-              			},
+              		},
               		"check_callback" : true,
               		'plugins':[ "contextmenu","wholerow","types","dnd","state"],
               		'contextmenu':{
@@ -60,9 +56,9 @@ function myCtrl(restCalls,$scope,$window){
 									                 restCalls.deleteHostNode(id)
          												.then(function successCallBack(response){
 									        					location.reload();					
-																});					           
-														  }
-									            },
+														});					           
+											}
+									},
                           			"Create": {
                             	 			"separator_before": false,
           									"separator_after": false,
@@ -79,18 +75,15 @@ function myCtrl(restCalls,$scope,$window){
            												$scope.hostgroup.host_trap="false";
            												$scope.hostgroup.inverse_suppression="false";
            												$scope.hostgroup.parentid=id;
-           												})
-           											}
-                           					}
-									};
-								}
-							}
-                 		});
-        		}
-
-
-
-        	$('#left').on("changed.jstree", function (e, data) {
+           											})
+           									}
+                           			}
+							};
+						}
+					}
+                });
+        	}
+			$('#left').on("changed.jstree", function (e, data) {
          		var id = data.node.id;
        	 		restCalls.getFlattenTree()
          			.then(function successCallBack(response){
@@ -98,34 +91,30 @@ function myCtrl(restCalls,$scope,$window){
 								for(var i=0;i<$scope.result.length;i++){
 										if($scope.result[i].id==id){
 												$scope.hostgroup = $scope.result[i];
-													}
-												}
-									// $scope.isDisabled=true;
-									//  $scope.updateEnabled=true;
+										}
+								}
 								console.log("success")
-										});
-         							});
-						}
+					});
+         	});
+	}
 
-						$scope.initleft();
-						$scope.submit =function(id,hostgroup){
-			if(id==null||id==""){
-			
-			restCalls.submitNewForm(hostgroup).then(function successCallBack(response){
-				$window.alert("Successfully Submitted");
-				location.reload();
-				console.log("success")
-			});
+	$scope.initleft();
+	$scope.submit =function(id,hostgroup){
+		if(id==null||id==""){
+			restCalls.submitNewForm(hostgroup)
+				.then(function successCallBack(response){
+					$window.alert("Successfully Submitted");
+					location.reload();
+					console.log("success")
+				});
 		}else{
-
-			restCalls.submit(id,hostgroup).then(function successCallBack(response){
-				$window.alert("Updated Successfully");
-				location.reload();
-			})
-		
-
+			restCalls.submit(id,hostgroup)
+				.then(function successCallBack(response){
+					$window.alert("Updated Successfully");
+					location.reload();
+				})
 		}
-}
+	}
 };
 
 
