@@ -14,17 +14,19 @@ angular.module('myApp')
 			}
 			return $http.put("http://localhost:8080/jerseyrest/rest/hostgroup/"+id,values);
 		}
-		this.submitNewForm = function(hostgroup){
+		this.submitNewForm = function(hostgroup,usernames,ipAddressRange){
 			var values={
 				 
 				 name:hostgroup.name,
 				 parentid:hostgroup.parentid,
-				 hostbaseline:hostgroup.hostbaseline,
-				 suppress_excluded_service:hostgroup.suppress_excluded_service,
-				 inverse_suppression:hostgroup.inverse_suppression,
-				 host_trap:hostgroup.host_trap,
-				 send_to_cta:hostgroup.send_to_cta,
+				 hostBaseline:hostgroup.hostbaseline,
+				 suppressExcludedService:hostgroup.suppress_excluded_service,
+				 inverseSuppression:hostgroup.inverse_suppression,
+				 hostTrap:hostgroup.host_trap,
+				 sendToCta:hostgroup.send_to_cta,
 				 description:hostgroup.description,
+				 hostGroupUser:usernames,
+				 ipAddress:ipAddressRange
 				
 			}
 			return $http.post("http://localhost:8080/jerseyrest/rest/hostgroup",values);
@@ -40,6 +42,8 @@ angular.module('myApp')
 		}
 
 		this.getFlattenTree =  function(){
+			
+
 			return $http.get('http://localhost:8080/jerseyrest/rest/hostgroup/flatten');
 		}
 

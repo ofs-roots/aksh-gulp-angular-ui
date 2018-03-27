@@ -6,6 +6,23 @@ myCtrl.$inject = ['restCalls','$scope','$window'];
 function myCtrl(restCalls,$scope,$window){
 	$scope.greeting = "Welcome";
 
+	$scope.usernames = [];
+	$scope.ipAddressRange =[];
+	$scope.adduser = function(host_user){
+		$scope.usernames.push(host_user);
+		$scope.host_user="";
+
+	}
+	$scope.addip = function(host){
+		$scope.ipAddressRange.push({"ipAddresses":host.ip_address,
+			"ipLocation":host.ip_location,
+			"ipDescription":host.ip_desc
+	});
+		$scope.host.ip_address="";
+		$scope.host.ip_location="";
+		$scope.host.ip_desc="";
+	}
+
 	$scope.cancel = function(){
 			location.reload();
 	}
@@ -99,9 +116,9 @@ function myCtrl(restCalls,$scope,$window){
 	}
 
 	$scope.initleft();
-	$scope.submit =function(id,hostgroup){
+	$scope.submit =function(id,hostgroup,usernames,ipAddressRange){
 		if(id==null||id==""){
-			restCalls.submitNewForm(hostgroup)
+			restCalls.submitNewForm(hostgroup,usernames,ipAddressRange)
 				.then(function successCallBack(response){
 					$window.alert("Successfully Submitted");
 					location.reload();
@@ -112,7 +129,7 @@ function myCtrl(restCalls,$scope,$window){
 				.then(function successCallBack(response){
 					$window.alert("Updated Successfully");
 					location.reload();
-				})
+				});
 		}
 	}
 };
