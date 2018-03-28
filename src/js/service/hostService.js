@@ -1,29 +1,32 @@
 angular.module('myApp')
 .service('restCalls',function($http,$q){
 		var deferred = $q.defer;
-		this.submit = function(id,hostgroup){
+		this.updateForm = function(id,hostgroup,usernames,ipAddressRange){
 			var values={
+				id:id,
 				name:hostgroup.name,
 				 		parentid:hostgroup.parentid,
-				 		hostbaseline:hostgroup.hostbaseline,
-				 		suppress_excluded_service:hostgroup.suppress_excluded_service,
-				 		inverse_suppression:hostgroup.inverse_suppression,
-				 		host_trap:hostgroup.host_trap,
-				 		send_to_cta:hostgroup.send_to_cta,
-				 		description:hostgroup.description
+				 		hostBaseline:hostgroup.hostBaseline,
+				 		suppressExcludedService:hostgroup.suppressExcludedService,
+				 		inverseSuppression:hostgroup.inverseSuppression,
+				 		hostTrap:hostgroup.hostTrap,
+				 		sendToCta:hostgroup.sendToCta,
+				 		description:hostgroup.description,
+				 		hostGroupUser:usernames,
+				 		ipAddress:ipAddressRange
 			}
-			return $http.put("http://localhost:8080/jerseyrest/rest/hostgroup/"+id,values);
+			return $http.put("http://localhost:8080/jerseyrest/rest/hostgroup",values);
 		}
 		this.submitNewForm = function(hostgroup,usernames,ipAddressRange){
 			var values={
 				 
 				 name:hostgroup.name,
 				 parentid:hostgroup.parentid,
-				 hostBaseline:hostgroup.hostbaseline,
-				 suppressExcludedService:hostgroup.suppress_excluded_service,
-				 inverseSuppression:hostgroup.inverse_suppression,
-				 hostTrap:hostgroup.host_trap,
-				 sendToCta:hostgroup.send_to_cta,
+				 hostBaseline:hostgroup.hostBaseline,
+				 suppressExcludedService:hostgroup.suppressExcludedService,
+				 inverseSuppression:hostgroup.inverseSuppression,
+				 hostTrap:hostgroup.hostTrap,
+				 sendToCta:hostgroup.sendToCta,
 				 description:hostgroup.description,
 				 hostGroupUser:usernames,
 				 ipAddress:ipAddressRange

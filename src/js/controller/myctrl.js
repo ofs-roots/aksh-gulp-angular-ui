@@ -86,12 +86,14 @@ function myCtrl(restCalls,$scope,$window){
            												$scope.hostgroup.id="";
            												$scope.hostgroup.name="";
            												$scope.hostgroup.description="";
-           												$scope.hostgroup.hostbaseline="false";
-           												$scope.hostgroup.suppress_excluded_service="false";
-           												$scope.hostgroup.send_to_cta="false";
-           												$scope.hostgroup.host_trap="false";
-           												$scope.hostgroup.inverse_suppression="false";
+           												$scope.hostgroup.hostBaseline="false";
+           												$scope.hostgroup.suppressExcludedService="false";
+           												$scope.hostgroup.sendToCta="false";
+           												$scope.hostgroup.hostTrap="false";
+           												$scope.hostgroup.inverseSuppression="false";
            												$scope.hostgroup.parentid=id;
+           												$scope.usernames=[];
+           												$scope.ipAddressRange=[];
            											})
            									}
                            			}
@@ -108,6 +110,8 @@ function myCtrl(restCalls,$scope,$window){
 								for(var i=0;i<$scope.result.length;i++){
 										if($scope.result[i].id==id){
 												$scope.hostgroup = $scope.result[i];
+												$scope.usernames = $scope.result[i].hostGroupUser;
+												$scope.ipAddressRange = $scope.result[i].ipAddress;
 										}
 								}
 								console.log("success")
@@ -125,7 +129,7 @@ function myCtrl(restCalls,$scope,$window){
 					console.log("success")
 				});
 		}else{
-			restCalls.submit(id,hostgroup)
+			restCalls.updateForm(id,hostgroup,usernames,ipAddressRange)
 				.then(function successCallBack(response){
 					$window.alert("Updated Successfully");
 					location.reload();

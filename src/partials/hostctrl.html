@@ -17,16 +17,19 @@
 				<input class="form-control" type="text" ng-model="host.ip_location"><br>
 			IP DESCRIPTION:<br>
 				<input class="form-control" type="text" ng-model="host.ip_desc"><br>
-				<input type="button" class="btn btn-success" ng-click="addip(host)" value="Add">
+				<input type="button" class="btn btn-success" ng-click="addip(host)" value="Add"><br>
+			List of ip addresses:
+			<ul ng-repeat="ipaddress in ipAddressRange">
+				<li>{{ipaddress.ipAddresses}}
 			</div>
 		<div class="col-sm-4">
 			<div class="checkbox-inline">
 				ADVANCED OPTIONS<br>
-					<input type="checkbox" ng-model="hostgroup.hostbaseline" value="false">Enable baselining for host in this group<br>
-					<input type="checkbox" ng-model="hostgroup.suppress_excluded_service" value="false">Disable security Events using excluded services<br>
-					<input type="checkbox" ng-model="hostgroup.send_to_cta" value="false">Disable flood alarm and security events when a host in this group is the target<br>
-					<input type="checkbox" ng-model="hostgroup.host_trap" value="false">Trap hosts that scan unused addresses in this host<br>
-					<input type="checkbox" ng-model="hostgroup.inverse_suppression" value="false">Inverse Suppression<br><br>
+					<input type="checkbox" ng-model="hostgroup.hostBaseline" value="false">Enable baselining for host in this group<br>
+					<input type="checkbox" ng-model="hostgroup.suppressExcludedService" value="false">Disable security Events using excluded services<br>
+					<input type="checkbox" ng-model="hostgroup.sendToCta" value="false">Disable flood alarm and security events when a host in this group is the target<br>
+					<input type="checkbox" ng-model="hostgroup.hostTrap" value="false">Trap hosts that scan unused addresses in this host<br>
+					<input type="checkbox" ng-model="hostgroup.inverseSuppression" value="false">Inverse Suppression<br><br>
 					HOSTGROUP USER:<br>
 					<input type="text" class="form-control" ng-model="host_user">
 					<input type="button" class="btn btn-success" ng-click="adduser(host_user)" value="Add">
