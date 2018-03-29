@@ -6,22 +6,12 @@ myCtrl.$inject = ['restCalls','$scope','$window'];
 function myCtrl(restCalls,$scope,$window){
 	$scope.greeting = "Welcome";
 
-	$scope.usernames = [];
-	$scope.ipAddressRange =[];
-	$scope.adduser = function(host_user){
-		$scope.usernames.push(host_user);
-		$scope.host_user="";
+	
+	$scope.refresh = function(){
+		location.reload();
 
 	}
-	$scope.addip = function(host){
-		$scope.ipAddressRange.push({"ipAddresses":host.ip_address,
-			"ipLocation":host.ip_location,
-			"ipDescription":host.ip_desc
-	});
-		$scope.host.ip_address="";
-		$scope.host.ip_location="";
-		$scope.host.ip_desc="";
-	}
+	
 
 	$scope.cancel = function(){
 			location.reload();
@@ -72,7 +62,8 @@ function myCtrl(restCalls,$scope,$window){
 									           		var id = $node.id;
 									                 restCalls.deleteHostNode(id)
          												.then(function successCallBack(response){
-									        					location.reload();					
+         													$scope.banner = true;
+         													$scope.delete = true;					
 														});					           
 											}
 									},
@@ -92,8 +83,8 @@ function myCtrl(restCalls,$scope,$window){
            												$scope.hostgroup.hostTrap="false";
            												$scope.hostgroup.inverseSuppression="false";
            												$scope.hostgroup.parentid=id;
-           												$scope.usernames=[];
-           												$scope.ipAddressRange=[];
+           												$scope.hostgroup.ip_address=[];
+           												$scope.hostgroup.user=[];
            											})
            									}
                            			}
@@ -110,8 +101,12 @@ function myCtrl(restCalls,$scope,$window){
 								for(var i=0;i<$scope.result.length;i++){
 										if($scope.result[i].id==id){
 												$scope.hostgroup = $scope.result[i];
-												$scope.usernames = $scope.result[i].hostGroupUser;
-												$scope.ipAddressRange = $scope.result[i].ipAddress;
+												$scope.hostgroup.user = $scope.result[i].hostGroupUser.join();
+												var ip=[];
+												for(j=0;j<$scope.result[i].ipAddress.length;j++){
+													ip.push($scope.result[i].ipAddress[j].ipAddresses);
+												}
+												$scope.hostgroup.ip_address=ip.join();
 										}
 								}
 								console.log("success")
@@ -120,19 +115,32 @@ function myCtrl(restCalls,$scope,$window){
 	}
 
 	$scope.initleft();
-	$scope.submit =function(id,hostgroup,usernames,ipAddressRange){
+	$scope.submit =function(id,hostgroup){
+		var usernames=hostgroup.user.split(',');
+		var ipAddressRange = hostgroup.ip_address.split(',');
+		var ipRange=[];
+		for(i=0;i<ipAddressRange.length;i++){
+			ipRange.push({"ipAddresses":ipAddressRange[i],
+			"ipLocation":"India",
+			"ipDescription":"sdgg"
+			});
+
+		}
 		if(id==null||id==""){
-			restCalls.submitNewForm(hostgroup,usernames,ipAddressRange)
+			restCalls.submitNewForm(hostgroup,usernames,ipRange)
 				.then(function successCallBack(response){
-					$window.alert("Successfully Submitted");
-					location.reload();
+
+					
+					$scope.banner = true;
+					$scope.success = true;
 					console.log("success")
 				});
+				// location.reload();
 		}else{
-			restCalls.updateForm(id,hostgroup,usernames,ipAddressRange)
+			restCalls.updateForm(id,hostgroup,usernames,ipRange)
 				.then(function successCallBack(response){
-					$window.alert("Updated Successfully");
-					location.reload();
+					$scope.banner = true;
+					$scope.update = true;
 				});
 		}
 	}
