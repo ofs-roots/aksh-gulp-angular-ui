@@ -1,11 +1,14 @@
 angular.module('myApp')
 .service('restCalls',function($http,$q){
-		var deferred = $q.defer;
-		this.updateForm = function(id,hostgroup,usernames,ipAddressRange){
+        this.getFlattenTree =  function(){
+			return $http.get('http://localhost:8080/jerseyrest/rest/hostgroup/flatten');
+		}
+
+		this.updateForm = function(id,hostgroup,usernames,ipAddressRange,parentid){
 			var values={
 				id:id,
 				name:hostgroup.name,
-				 		parentid:hostgroup.parentid,
+				 		parentid:parentid,
 				 		hostBaseline:hostgroup.hostBaseline,
 				 		suppressExcludedService:hostgroup.suppressExcludedService,
 				 		inverseSuppression:hostgroup.inverseSuppression,
@@ -17,11 +20,11 @@ angular.module('myApp')
 			}
 			return $http.put("http://localhost:8080/jerseyrest/rest/hostgroup",values);
 		}
-		this.submitNewForm = function(hostgroup,usernames,ipAddressRange){
+		this.submitNewForm = function(hostgroup,usernames,ipAddressRange,parentid){
 			var values={
 				 
 				 name:hostgroup.name,
-				 parentid:hostgroup.parentid,
+				 parentid:parentid,
 				 hostBaseline:hostgroup.hostBaseline,
 				 suppressExcludedService:hostgroup.suppressExcludedService,
 				 inverseSuppression:hostgroup.inverseSuppression,
@@ -44,11 +47,7 @@ angular.module('myApp')
 
 		}
 
-		this.getFlattenTree =  function(){
-			
-
-			return $http.get('http://localhost:8080/jerseyrest/rest/hostgroup/flatten');
-		}
+		
 
 		this.deleteHostNode = function(id){
 			return $http.delete("http://localhost:8080/jerseyrest/rest/hostgroup/delete/"+id,);

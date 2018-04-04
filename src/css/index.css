@@ -1,0 +1,37 @@
+.container {
+  background-color: #e8e5e5;
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  padding-bottom: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.header {
+  padding-bottom: 10px;
+}
+
+#jstree-panel {
+  background-color: white;
+  margin-left: 10px;
+  max-width:28%;
+  padding-top:15px;
+}
+
+.form1-panel{
+  background-color: white;
+  margin-left: 10px;
+  max-width:33.33333%;
+  padding-top: 15px;
+}
+.form2-panel{
+   background-color: white;
+    max-width:33.33333%;
+    padding-top:15px;
+}
+#button{
+  padding-left: 200px;
+  padding-bottom: 10px;
+
+}
