@@ -1,48 +1,60 @@
-
 <div class="container">
 	<div class="header">
-	<h5>Host Group Management</h5>
+		<h5>Host Group Management</h5>
 	</div>
 	<div ng-if="banner">
 		<div class="alert alert-success alert-dismissible" ng-if="success">
-	    <a href="#" class="close" data-dismiss="alert" aria-label="close" ng-click="refresh()">&times;</a>
-	    <strong>Successfully Submitted</strong>
+	    	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+	    	<strong>Successfully Submitted</strong>
 	  	</div>
 	  	<div class="alert alert-success alert-dismissible" ng-if="update">
-	    <a href="#" class="close" data-dismiss="alert" aria-label="close" ng-click="refresh()">&times;</a>
-	    <strong>Updated Successfully</strong>
+	    	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+	    	<strong>Updated Successfully</strong>
+	  	</div>
+	  	<div class="alert alert-success alert-dismissible" ng-if="export">
+	    	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+	    	<strong>Exported Successfully</strong>
 	  	</div>
 	  	<div class="alert alert-success alert-dismissible" ng-if="delete">
-	    <a href="#" class="close" data-dismiss="alert" aria-label="close" ng-click="refresh()">&times;</a>
-	    <strong>Deleted Successfully</strong>
+	    	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+	    	<strong>Deleted Successfully</strong>
 	  	</div>
 	  	<div class="alert alert-danger alert-dismissible" ng-if="duplicate">
-	    <a href="#" class="close" data-dismiss="alert" aria-label="close" ng-click="refresh()">&times;</a>
-	    <strong>Duplicate Hostnames are not allowed</strong> 
+	    	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+	    	<strong>Duplicate Hostnames are not allowed</strong> 
 	  	</div>
-	 </div>
+	</div>
 
 	<div class="row">
-		<div id ="jstree-panel" class="col-sm-4">
+		<div class="col-sm-4">
+			<div>
+				<input type="text" class="form-control search" ng-model="searchText" placeholder="Enter the hostgroup name">
+				
+			</div>
+			<div id ="jstree-panel">
+			</div>
+			<div class="align">
+			<input type="button" class="btn btn-default btn-square" ng-click="export()" value="Export">
 		</div>
-		<div class="col-sm-4 form1-panel" >
+		</div>
+			<div class="col-sm-4 form1-panel" >
 			<form name="hostform">
-			HOST GROUP ID:<br>
-				<input class="form-control" type="text" ng-model="hostgroup.id" disabled><br>
-			HOST GROUP NAME:<br>
-				<input class="form-control" type="text" ng-model="hostgroup.name" required><br>
-			HOST GROUP PARENT NAME:<br>
-				<input class="form-control" type="text" ng-model="hostgroup.parentid" required><br>
-			DESCRIPTION (512 CHAR MAX):<br>
-				<textarea class="form-control" rows="5" type="text" ng-model="hostgroup.description" maxlength="512" width="70" required></textarea><br>
-			IP ADDRESSES AND RANGES:<br>
-			<textarea class="form-control" rows="9" type="text" ng-model="hostgroup.ip_address" maxlength="512" width="50" required></textarea><br>
+				HOST GROUP ID:<br>
+					<input class="form-control" type="text" ng-model="hostgroup.id" disabled><br>
+				HOST GROUP NAME:<br>
+					<input class="form-control" type="text" ng-model="hostgroup.name" required><br>
+				HOST GROUP PARENT NAME:<br>
+					<input class="form-control" type="text" ng-model="hostgroup.parentid" required><br>
+				DESCRIPTION (512 CHAR MAX):<br>
+					<textarea class="form-control" rows="5" type="text" ng-model="hostgroup.description" maxlength="512" width="70" required></textarea><br>
+				IP ADDRESSES AND RANGES:<br>
+				<textarea class="form-control" rows="9" type="text" ng-model="hostgroup.ip_address" maxlength="512" width="50" required></textarea><br>
 			</form>
 		</div>
 		<div class="col-sm-4 form2-panel">
 			<div class="checkbox-inline">
 				<form name="options">
-				ADVANCED OPTIONS<br>
+					ADVANCED OPTIONS<br>
 					<input type="checkbox" ng-model="hostgroup.hostBaseline" value="false">Enable baselining for host in this group<br>
 					<input type="checkbox" ng-model="hostgroup.suppressExcludedService" value="false">Disable security Events using excluded services<br>
 					<input type="checkbox" ng-model="hostgroup.sendToCta" value="false">Disable flood alarm and security events when a host in this group is the target<br>

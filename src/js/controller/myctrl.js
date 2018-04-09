@@ -5,9 +5,19 @@ myCtrl.$inject = ['restCalls','$scope','$window'];
 
 function myCtrl(restCalls,$scope,$window){
 
-	// $scope.refresh = function(){
-	// 	location.reload();
-	// }
+	$scope.export = function(){
+		// restCalls.doExport()
+		// .then(function successCallBack(response){
+		// 	$scope.banner=true;
+		// 	$scope.export=true;
+		// 	$scope.delete = false;
+  //        	$scope.success = false;
+		// 	$scope.update = false;
+		// 	$scope.duplicate = false;
+		// })
+		$window.open('http://localhost:8080/jerseyrest/rest/hostgroup/export');
+	}
+
 	$scope.refreshpage = function(){
 		$scope.initleft();
 	}
@@ -35,10 +45,10 @@ function myCtrl(restCalls,$scope,$window){
 							temp.text=response.data[i].name;
 							tree.push(temp);
 						}else{
-									temp.id=response.data[i].id;
-									temp.parent=response.data[i].parentid;
-									temp.text=response.data[i].name;
-									tree.push(temp);
+							temp.id=response.data[i].id;
+							temp.parent=response.data[i].parentid;
+							temp.text=response.data[i].name;
+							tree.push(temp);
 						}
 					}
 					createJSTree(tree);
@@ -57,7 +67,11 @@ function myCtrl(restCalls,$scope,$window){
       				"whole_node" : false
    				},
               	"check_callback" : true,
-              	'plugins':[ "contextmenu","checkbox","wholerow","themes"],
+              	'plugins':[ "contextmenu","checkbox","wholerow","themes","search"],
+              	'search':{
+              		"case_sensitive":false,
+              		"show_only_matches":false
+              	},
               	'contextmenu':{
               		"select_node": true, 
               		"items": function ($node) {
@@ -74,6 +88,7 @@ function myCtrl(restCalls,$scope,$window){
          										$scope.refreshpage();
          										$scope.banner = true;
          										$scope.delete = true;
+         										$scope.export=false;
          										$scope.success = false;
 												$scope.update = false;
 												$scope.duplicate = false;	
@@ -144,6 +159,10 @@ function myCtrl(restCalls,$scope,$window){
 					}
 				});
 	    });
+	    $('.search').keyup(function(){
+	    	var searchString = $(this).val();
+	    	$('#jstree-panel').jstree('search',searchString);
+	    })
 	}
 
 	$scope.initleft();
@@ -169,6 +188,7 @@ function myCtrl(restCalls,$scope,$window){
 									$scope.refreshpage();
 									$scope.banner = true;
 									$scope.success = true;
+									$scope.export=false;
 									$scope.duplicate = false;
 									$scope.update = false;
 									$scope.delete = false;
@@ -177,6 +197,7 @@ function myCtrl(restCalls,$scope,$window){
 								if(error.status==-1){
 								$scope.banner = true;
 								$scope.duplicate = true;
+								$scope.export=false;
 								$scope.success = false;
 								$scope.update = false;
 								$scope.delete = false;
@@ -187,6 +208,11 @@ function myCtrl(restCalls,$scope,$window){
 								.then(function successCallBack(response){
 									$scope.banner = true;
 									$scope.update = true;
+									$scope.export=false;
+									$scope.success = false;
+									$scope.delete = false;
+									$scope.duplicate = true;
+								
 								});
 							}
 	         		}
