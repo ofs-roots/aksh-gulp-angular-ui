@@ -8,9 +8,25 @@ var gulp = require('gulp'),
     pkg = require('./package.json'),
     minifyCSS = require('gulp-minify-css'),
     clean = require('gulp-clean'),
-    watch = require('gulp-watch');
+    watch = require('gulp-watch'),
+    karma = require('karma').Server,
+    open = require('gulp-open'),
+    connect = require('gulp-connect');
+
+gulp.task('open',function(){
+    gulp.src('dist/index.html')
+    .pipe(open({uri:'http://localhost:8001/'}));
+});
+
+gulp.task('connect',function(){
+    connect.server({
+        root:'dist',
+        port:8001,
+        livereload:true
+ });
+});
     
-    gulp.task('clean', function(){
+gulp.task('clean', function(){
         gulp.src('./dist')
         .pipe(clean());
     })
@@ -27,7 +43,8 @@ gulp.task('scripts', function() {
         // .pipe(uglify()) // uglifying this file
         // .pipe(rename({suffix: '.min'})) // renaming file to myproject.min.js
         // .pipe(header('/*! <%= pkg.name %> <%= pkg.version %> */\n', {pkg: pkg} )) // banner with version and name of package
-        .pipe(gulp.dest('./dist/js/')) // save file to destination directory
+        .pipe(gulp.dest('./dist/js/'))
+        .pipe(connect.reload()); // save file to destination directory
 });
 
 gulp.task('styles', function() {
@@ -41,27 +58,28 @@ gulp.task('styles', function() {
         .pipe(minifyCSS({keepBreaks:false})) // minifying file
         .pipe(rename({suffix: '.min'})) // renaming file to myproject.min.css
         .pipe(header('/*! <%= pkg.name %> <%= pkg.version %> */\n', {pkg: pkg} )) // making banner with version and name of package
-        .pipe(gulp.dest('./dist/css/')) // saving file myproject.min.css to this directory
+        .pipe(gulp.dest('./dist/css/'))
+        .pipe(connect.reload()); // saving file myproject.min.css to this directory
 });
 
-gulp.task('watcher', function() {
-    gulp.src('src/js/**/*.js')
-        .pipe(watch('src/js/**/*.js', function(event) { // if changed any file in "src/scripts" (recursively)
-            gulp.run('scripts'); // run task "scripts"
-        }));
-    gulp.src('src/css/*.css')
-        .pipe(watch('src/css/*.css', function(event) {
-            gulp.run('styles');
-        }));
-    gulp.src('src/partials/*.html')
-        .pipe(watch('src/partials/*.html', function(event){
-            gulp.run('partials');
-        }));
-        gulp.src('src/index.html')
-        .pipe(watch('src/index.html', function(event) {
-            gulp.run('copyHtml');
-        }));
-});
+// gulp.task('watcher', function() {
+//     gulp.src('src/js/**/*.js')
+//         .pipe(watch('src/js/**/*.js', function(event) { // if changed any file in "src/scripts" (recursively)
+//             gulp.run('scripts'); // run task "scripts"
+//         }));
+//     gulp.src('src/css/*.css')
+//         .pipe(watch('src/css/*.css', function(event) {
+//             gulp.run('styles');
+//         }));
+//     gulp.src('src/partials/*.html')
+//         .pipe(watch('src/partials/*.html', function(event){
+//             gulp.run('partials');
+//         }));
+//         gulp.src('src/index.html')
+//         .pipe(watch('src/index.html', function(event) {
+//             gulp.run('copyHtml');
+//         }));
+// });
 
 gulp.task('partials',function(){
      gulp.src('src/partials/*.html')
@@ -80,5 +98,19 @@ gulp.task('jstree-icons',function(){
     .pipe(gulp.dest('./dist/css/'))
 });
 
-gulp.task('default', ['scripts', 'styles','copyHtml','partials','jstree-icons']); // start default tasks "gulp"
-gulp.task('watch', ['watcher']); // start watcher task "gulp watch"
+gulp.task('default', ['scripts', 'styles','copyHtml','partials','jstree-icons','connect','watch']); // start default tasks "gulp"
+// gulp.task('watch', ['watcher']); // start watcher task "gulp watch"
+
+gulp.task('test', function(done) {
+    return karma.start({
+      configFile:  __dirname + '/test/config/karma.config.js',
+      singleRun: true
+    }, function() {
+        done();
+    });
+});
+
+gulp.task('watch',function(){
+    gulp.watch('src/js/**/*.js',['scripts']);
+    gulp.watch('src/css/*.css',['styles']);
+});
