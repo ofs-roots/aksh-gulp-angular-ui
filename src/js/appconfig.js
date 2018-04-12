@@ -8,6 +8,7 @@ angular.module('myApp')
 
 		$routeProvider
 			.when('/hostgroup', routeConfig)
+			.when('/hostgroup/:id',routeConfig)
 			.otherwise({
 				redirectTo: '/hostgroup'
 			});

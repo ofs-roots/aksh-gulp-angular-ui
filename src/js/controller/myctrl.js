@@ -1,20 +1,13 @@
 angular.module('myApp')
 		.controller('myctrl', myCtrl);
 
-myCtrl.$inject = ['restCalls','$scope','$window'];
+myCtrl.$inject = ['restCalls','modelData','$scope','$window','$routeParams'];
 
-function myCtrl(restCalls,$scope,$window){
+function myCtrl(restCalls,modelData,$scope,$window,$routeParams){
+
+	
 
 	$scope.export = function(){
-		// restCalls.doExport()
-		// .then(function successCallBack(response){
-		// 	$scope.banner=true;
-		// 	$scope.export=true;
-		// 	$scope.delete = false;
-  //        	$scope.success = false;
-		// 	$scope.update = false;
-		// 	$scope.duplicate = false;
-		// })
 		$window.open('http://localhost:8080/jerseyrest/rest/hostgroup/export');
 	}
 
@@ -25,13 +18,20 @@ function myCtrl(restCalls,$scope,$window){
 	$scope.cancel = function(){
 			location.reload();
 	}
-
+	$scope.flattenTree =[];
+	// var flatten=[];
 	$scope.initleft = function(){
+		$scope.jstree();
+		}
+	
+	$scope.initleft = function(){
+		
 		$(function () {
 			var getData;
 		 	var tree=[];
 		 	restCalls.getFlattenTree()
          		.then(function successCallBack(response){
+         			$scope.flattenTree = response.data;
          			var rootnode={};
 					rootnode.id=0;
 					rootnode.parent='#';
@@ -57,20 +57,21 @@ function myCtrl(restCalls,$scope,$window){
 		function createJSTree(tree) {            
             $('#jstree-panel').jstree({
                 'core': {
-                	'data': tree
+                	'data': tree,
+                	'multiple':false
               	},
               	'themes':{
               		'icons':false
               	},
              	"checkbox" : {
      				"three_state" : false, // to avoid that fact that checking a node also check others
-      				"whole_node" : false
+      				"whole_node" : false,
    				},
               	"check_callback" : true,
               	'plugins':[ "contextmenu","checkbox","wholerow","themes","search"],
               	'search':{
               		"case_sensitive":false,
-              		"show_only_matches":false
+              		"show_only_matches":true
               	},
               	'contextmenu':{
               		"select_node": true, 
@@ -100,8 +101,21 @@ function myCtrl(restCalls,$scope,$window){
           						"separator_after": false,
            						"label": "Create",
            						"action": function (obj) { 
-           								var id=$node.id;
-           								$scope.$apply(function(){
+           							var id=$node.id;
+           							$scope.hostgroup={};
+           							if(id==0){
+           										$scope.hostgroup.parentid="--";
+           								}else{
+           									$scope.flatten = $scope.flattenTree;
+
+         											for(var i=0;i<$scope.flatten.length;i++){
+         												if(id==$scope.flatten[i].id){
+				           									$scope.hostgroup.parentid=$scope.flatten[i].name;
+				           								}
+         											}
+           								}
+           								
+           								 $scope.$apply(function(){
 				           					$scope.hostgroup.id="";
 				           					$scope.hostgroup.name="";
 				           					$scope.hostgroup.description="";
@@ -112,19 +126,9 @@ function myCtrl(restCalls,$scope,$window){
 				           					$scope.hostgroup.inverseSuppression="false";
 				           					$scope.hostgroup.ip_address=[];
 				           					$scope.hostgroup.user=[];
-				           				})
-           								if(id==0){
-           										$scope.hostgroup.parentid="Niyut";
-           								}else{
-           										restCalls.getFlattenTree()
-         										.then(function successCallBack(response){
-         											for(var i=0;i<response.data.length;i++){
-         												if(id==response.data[i].id){
-				           									$scope.hostgroup.parentid=response.data[i].name;
-				           								}
-         											}
-         										})
-           								}
+				           				 })
+           								
+           								
            						}
                            	}
 						};
@@ -132,36 +136,46 @@ function myCtrl(restCalls,$scope,$window){
 				}
             });
         }
+        $("#jstree-panel").on("loaded.jstree", function(){
+    		$('#jstree-panel').jstree(true).select_node($routeParams.id);
+		});
+       
 		$('#jstree-panel').on("changed.jstree", function (e, data) {
 	        var id = data.node.id;
-	       	restCalls.getFlattenTree()
-	         	.then(function successCallBack(response){
-	         		$scope.result=response.data;
-					for(var i=0;i<$scope.result.length;i++){
-						if($scope.result[i].id==id){
-							$scope.hostgroup = $scope.result[i];
-							$scope.hostgroup.user = $scope.result[i].hostGroupUser.join('\n');
+	        	$scope.$apply(function(){
+	         		var result=$scope.flattenTree;
+					for(var i=0;i<result.length;i++){
+						if(result[i].id==id){
+							$scope.hostgroup = result[i];
+							$scope.hostgroup.user = result[i].hostGroupUser.join('\n');
 							var ip=[];
-							for(j=0;j<$scope.result[i].ipAddress.length;j++){
-								ip.push($scope.result[i].ipAddress[j].ipAddresses);
+							for(j=0;j<result[i].ipAddress.length;j++){
+								ip.push(result[i].ipAddress[j].ipAddresses);
 							}
 							$scope.hostgroup.ip_address=ip.join('\n');
-							for(var m=0;m<$scope.result.length;m++){
-								if($scope.result[i].parentid == $scope.result[m].id){
-									$scope.hostgroup.parentid = $scope.result[m].name;
+							for(var m=0;m<result.length;m++){
+								if(result[i].parentid == result[m].id){
+									$scope.hostgroup.parentid = result[m].name;
 								}else{
-									if($scope.result[i].parentid == 0 ){
-										$scope.hostgroup.parentid = "Niyut"
+									if(result[i].parentid == 0){
+										$scope.hostgroup.parentid = "--"
 									}
 								}
 							}
 						}
 					}
 				});
-	    });
-	    $('.search').keyup(function(){
+	     });
+	    $('.search').keypress(function(e){
 	    	var searchString = $(this).val();
+	    	if(searchString.length >=3 && e.which == 13){
 	    	$('#jstree-panel').jstree('search',searchString);
+	    }
+	    })
+	    $('.search').keydown(function(e){
+	    	if(e.which==8){
+	    		$scope.refreshpage();
+	    	}
 	    })
 	}
 
@@ -177,21 +191,33 @@ function myCtrl(restCalls,$scope,$window){
 			"ipDescription":"sdgg"
 			});
 		}
-		restCalls.getFlattenTree()
-         	.then(function successCallBack(response){
-         		for(var i=0;i<response.data.length;i++){
-         			if($scope.hostgroup.parentid == response.data[i].name){
-	         			parentId = response.data[i].id;
-	         			if(id==null||id==""){
-							restCalls.submitNewForm(hostgroup,usernames,ipRange,parentId)
-								.then(function successCallBack(response){
-									$scope.refreshpage();
-									$scope.banner = true;
-									$scope.success = true;
-									$scope.export=false;
-									$scope.duplicate = false;
-									$scope.update = false;
-									$scope.delete = false;
+		
+        for(var i=0;i<$scope.flattenTree.length;i++){
+        	if($scope.hostgroup.parentid == $scope.flattenTree[i].name){
+	         	parentId = $scope.flattenTree[i].id;
+	         	$scope.saveOrUpdate(id,hostgroup,usernames,ipRange,parentId);
+	         }	
+         		 }
+         		 if($scope.hostgroup.parentid=="--"){
+	         	parentId = 0;
+	         	$scope.saveOrUpdate(id,hostgroup,usernames,ipRange,parentId);
+
+	         }
+         	// })	
+	}
+	
+	$scope.saveOrUpdate = function(id,hostgroup,usernames,ipRange,parentId){
+		if(id==null||id==""){
+	         			var response = modelData.jsonWithoutId(hostgroup,usernames,ipRange,parentId);
+						restCalls.submitNewForm(response)
+							.then(function successCallBack(response){
+								$scope.refreshpage();
+								$scope.banner = true;
+								$scope.success = true;
+								$scope.export=false;
+								$scope.duplicate = false;
+								$scope.update = false;
+								$scope.delete = false;
 							},
 							function errorCallBack(error){
 								if(error.status==-1){
@@ -204,21 +230,18 @@ function myCtrl(restCalls,$scope,$window){
 								}
 							});
 		 				}else{
-							restCalls.updateForm(id,hostgroup,usernames,ipRange,parentId)
+		 					var response = modelData.jsonWithId(id,hostgroup,usernames,ipRange,parentId)
+							restCalls.updateForm(response)
 								.then(function successCallBack(response){
 									$scope.banner = true;
 									$scope.update = true;
 									$scope.export=false;
 									$scope.success = false;
 									$scope.delete = false;
-									$scope.duplicate = true;
+									$scope.duplicate = false;
 								
 								});
 							}
-	         		}
-         		}
-         	})	
-	}
+	         		 }
 };
-
 
