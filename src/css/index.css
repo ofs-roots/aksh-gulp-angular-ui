@@ -54,4 +54,8 @@
 .btn-square{
   background-color: white;
 }
+#invalid{
+  padding-top: -10px;
+  color: red;
+}
 
