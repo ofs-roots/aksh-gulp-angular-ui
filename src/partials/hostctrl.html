@@ -4,30 +4,30 @@
 	</div>
 	<div ng-if="banner">
 		<div class="alert alert-success alert-dismissible" ng-if="success">
-	    	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+	    	<a class="close" data-dismiss="alert" aria-label="close">&times;</a>
 	    	<strong>Successfully Submitted</strong>
 	  	</div>
 	  	<div class="alert alert-success alert-dismissible" ng-if="update">
-	    	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+	    	<a  class="close" data-dismiss="alert" aria-label="close">&times;</a>
 	    	<strong>Updated Successfully</strong>
 	  	</div>
 	  	<div class="alert alert-success alert-dismissible" ng-if="export">
-	    	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+	    	<a class="close" data-dismiss="alert" aria-label="close">&times;</a>
 	    	<strong>Exported Successfully</strong>
 	  	</div>
 	  	<div class="alert alert-success alert-dismissible" ng-if="delete">
-	    	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+	    	<a class="close" data-dismiss="alert" aria-label="close">&times;</a>
 	    	<strong>Deleted Successfully</strong>
 	  	</div>
 	  	<div class="alert alert-danger alert-dismissible" ng-if="duplicate">
-	    	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+	    	<a class="close" data-dismiss="alert" aria-label="close">&times;</a>
 	    	<strong>Duplicate Hostnames are not allowed</strong> 
 	  	</div>
 	</div>
 
 	<div class="row">
 		<div class="col-sm-4">
-			<div>
+			<div class="search">
 				<input type="text" class="form-control search" ng-model="searchText" placeholder="Enter the hostgroup name">
 				
 			</div>
@@ -42,14 +42,16 @@
 				HOST GROUP ID:<br>
 					<input class="form-control" type="text" ng-model="hostgroup.id" disabled><br>
 				HOST GROUP NAME:<br>
-					<input class="form-control" type="text" ng-model="hostgroup.name" required><br>
+					<input class="form-control mandatory" type="text" ng-model="hostgroup.name" required><br>
 				HOST GROUP PARENT NAME:<br>
 					<input class="form-control" type="text" ng-model="hostgroup.parentid" required><br>
 				DESCRIPTION (512 CHAR MAX):<br>
 					<textarea class="form-control" rows="5" type="text" ng-model="hostgroup.description" maxlength="512" width="70" required></textarea><br>
 				IP ADDRESSES AND RANGES:<br>
-				<textarea class="form-control" rows="9" type="text" ng-model="hostgroup.ip_address" maxlength="512" width="50" required></textarea><br>
+				<textarea ip-validation class="form-control" id="ipAddress" rows="9" type="text" ng-model="hostgroup.ip_address" maxlength="512" width="50" required></textarea><br>
+				<div id="invalid" ng-if="ipadd">{{invalid}}</div>
 			</form>
+
 		</div>
 		<div class="col-sm-4 form2-panel">
 			<div class="checkbox-inline">
@@ -65,11 +67,14 @@
 				</form>
 					<br><br><br><br><br><br><br><br><br><br><br><br>
 			</div>
-			<div id="button">
-				<input type="button" class="btn btn-default btn-square" ng-click="cancel()" value="Cancel">
-				<input type="button" ng-disabled="hostform.$invalid || options.$invalid" class="btn btn-default btn-square" ng-click="submit(hostgroup.id,hostgroup)" value="Save">
-			</div>
+			
 		</div>	
+
+		<div id="button">
+				<input type="button" class="btn btn-default btn-square" ng-click="cancel()" value="Cancel">
+				<!-- <input type="button" ng-disabled="hostgroup.name.$invalid" class="btn btn-default btn-square save-button" ng-click="submit(hostgroup.id,hostgroup)" value="Save"> -->
+				<input type="button" class="btn btn-default btn-square save-button" ng-click="submit(hostgroup.id,hostgroup)" value="Save">
+			</div>
 	</div>
 </div>
 
